@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Install Libraries}{3}{0}{1}
+\beamer@sectionintoc {2}{Using Gutenbergr}{4}{0}{2}
+\beamer@sectionintoc {3}{Data Mining}{5}{0}{3}
+\beamer@sectionintoc {4}{Data Visualization}{11}{0}{4}

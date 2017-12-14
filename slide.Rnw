@@ -1,0 +1,172 @@
+\documentclass{beamer}
+
+\begin{document}
+\title{Titles}
+\author{Kimberly Staudt}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+    \tableofcontents
+\end{frame}
+
+
+\section{Install Libraries}
+\begin{frame}[fragile]
+  \frametitle{Install Libraries}
+
+First we must install the following libraries before we can begin. 
+    \begin{itemize}
+      \item
+        <<warning=FALSE,message=FALSE>>=
+        library(dplyr)
+        @
+      \item
+        <<warning=FALSE,message=FALSE>>=
+        library(gutenbergr)
+        @
+    \item
+        <<warning=FALSE,message=FALSE>>=
+        library(tidytext)
+        @
+    \item
+        <<warning=FALSE,message=FALSE>>=
+        library(stringr)
+        @
+    \item
+        <<warning=FALSE,message=FALSE>>=
+        library(ggplot2)
+        @
+     \item
+        <<warning=FALSE,message=FALSE>>=
+        library(wordcloud)
+        @
+    \end{itemize}
+\end{frame}
+
+
+\section{Using Gutenbergr}
+\begin{frame}[fragile]
+  \frametitle{Using Gutenbergr}
+  
+Download the Dunwhich Horror with the given ID and set to the dataframe, Lovecraft
+    <<warning=FALSE,message=FALSE>>=
+    Lovecraft<-gutenberg_download(50133)
+    @
+\end{frame}
+
+\section{Data Mining}
+\begin{frame}[fragile]
+\frametitle{Using Stringr}
+Once downloaded, use stringr to detect and remove all instances of the word Chapter.
+<<>>>=
+Lovecraft<-Lovecraft%>%
+filter(!str_detect(Horror$text,'CHAPTER'))
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Unnest Data}
+
+Next, Unnest the the text, and store into a dataframe. 
+<<>>=
+words_df<-Lovecraft%>%
+unnest_tokens(word,text)
+colnames(words_df)
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Bing Lexicon}
+Use the bing lexicon to get the positive and negative sentiments in the text.
+<<>>=
+bing<-get_sentiments('bing')
+colnames(bing)
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Inner Join}
+Use inner join to display positive and negative words in the text. 
+Remove the gutenberg id tag. 
+<<message=FALSE>>=
+ words_df<-inner_join(words_df,bing)
+
+words_df$gutenberg_id<-NULL
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Positive Words}
+Use dplyr to filter and count the top 10 most frequently occuring positive words.
+Then store this as a factor. 
+<<>>=
+pos<-words_df%>%
+  filter(sentiment=='positive')%>%
+  group_by(word)%>%
+  summarize(count=n(),sentiment=first(sentiment))%>%
+  arrange(count)%>%
+  top_n(10,wt=count)
+
+pos$word<-factor(pos$word,levels=pos$word)
+@
+
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]
+\frametitle{Negative Words}
+Now, do the same thing for the 10 most frequently occuring negative words.
+Store this as a factor.Lastly, use rbind to combine the negative and positive words. 
+<<>>=
+neg<-words_df%>%
+  filter(sentiment=='negative')%>%
+  group_by(word)%>%
+  summarize(count=n(),sentiment=first(sentiment))%>%
+  arrange(count)%>%
+  top_n(10,wt=count)
+
+neg$word<-factor(neg$word,levels=neg$word)
+
+combo<-rbind(pos,neg)
+@
+
+\framebreak
+\end{frame}
+
+
+\section{Data Visualization}
+\begin{frame}[allowframebreaks,fragile]
+\frametitle{Plotting}
+Use ggplot to create a bar chart of the positive words. 
+<<>>=
+ggplot()+
+  geom_bar(data=pos,aes(x=word,y=count),color='red',fill= 'blue',stat='identity')+
+coord_flip()
+@
+\framebreak
+\end{frame}
+
+\begin{frame}[allowframebreaks,fragile]
+\frametitle{Comparing Words}
+<<>>=
+ggplot()+
+  geom_bar(data=combo,
+           aes(x=word,y=count, fill=sentiment, 
+               color=sentiment),stat='identity')+
+  coord_flip()+
+  facet_wrap(~sentiment,scales='free_y')+
+  scale_fill_manual(values=c('red','yellow'))+
+scale_color_manual(values=c('yellow','red'))
+@
+\framebreak
+\end{frame}
+
+
+\end{document}
