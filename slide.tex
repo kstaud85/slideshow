@@ -51,7 +51,7 @@
 \usepackage{alltt}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-\title{Titles}
+\title{Gutenbergr and Bar Plots}
 \author{Kimberly Staudt}
 
 \begin{frame}
@@ -110,14 +110,7 @@ First we must install the following libraries before we can begin.
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-     \item
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{library}\hlstd{(wordcloud)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
+    
     \end{itemize}
 \end{frame}
 
@@ -263,7 +256,7 @@ Use ggplot to create a bar chart of the positive words.
 \hlkwd{coord_flip}\hlstd{()}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-13-1} 
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-12-1} 
 
 \end{knitrout}
 \framebreak
@@ -284,7 +277,7 @@ Use ggplot to create a bar chart of the positive words.
 \hlkwd{scale_color_manual}\hlstd{(}\hlkwc{values}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{'yellow'}\hlstd{,}\hlstr{'red'}\hlstd{))}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-14-1} 
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-13-1} 
 
 \end{knitrout}
 \framebreak

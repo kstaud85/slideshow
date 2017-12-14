@@ -1,7 +1,7 @@
 \documentclass{beamer}
 
 \begin{document}
-\title{Titles}
+\title{Gutenbergr and Bar Plots}
 \author{Kimberly Staudt}
 
 \begin{frame}
@@ -40,10 +40,7 @@ First we must install the following libraries before we can begin.
         <<warning=FALSE,message=FALSE>>=
         library(ggplot2)
         @
-     \item
-        <<warning=FALSE,message=FALSE>>=
-        library(wordcloud)
-        @
+    
     \end{itemize}
 \end{frame}
 
